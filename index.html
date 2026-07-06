@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eylül'e Özel 🧸❤️</title>
-    <!-- Konfeti efekti için gerekli kütüphane -->
+    <title>Eylül</title>
+    <!-- Konfeti efekti için kütüphane -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* Genel Sayfa Tasarımı (Başlangıçta Havalı Chrome Dark Teması) */
+        /* Genel Tasarım ve Geliştirilmiş Arka Plan (Chrome Dark Gradyan) */
         body {
             margin: 0;
             padding: 0;
-            background: #202124; /* Chrome Dark Mode Arka Planı */
+            background: linear-gradient(135deg, #1f2023 0%, #2c2d31 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -20,81 +20,85 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
-            transition: background 1s ease; /* Pembe temaya yumuşak geçiş için */
+            transition: background 1.2s ease;
         }
 
-        /* Başlık Alanları */
+        /* Başlıklar */
         h1 {
             color: #ffffff;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.7);
             text-align: center;
             z-index: 10;
         }
 
         p {
-            color: #9aa0a6; /* Chrome gri yazı rengi */
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            font-weight: bold;
+            color: #9aa0a6;
+            font-size: 1.15rem;
+            margin-bottom: 25px;
+            font-weight: 500;
             z-index: 10;
             text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
         }
 
-        /* XOX Oyun Tahtası Alanı */
+        /* XOX Oyun Tahtası */
         .game-container {
-            background: #292a2d; /* Chrome daha koyu panel rengi */
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 3px solid #3c4043;
+            background: rgba(41, 42, 45, 0.9);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            border: 2px solid #3c4043;
             z-index: 10;
+            backdrop-filter: blur(10px);
         }
 
         .board {
             display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 10px;
+            grid-template-columns: repeat(3, 105px);
+            grid-template-rows: repeat(3, 105px);
+            gap: 12px;
         }
 
         .cell {
             background-color: #35363a;
-            border: 2px solid #5f6368;
-            border-radius: 15px;
-            font-size: 2.5rem;
+            border: 1px solid #5f6368;
+            border-radius: 18px;
+            font-size: 2.8rem;
             font-weight: bold;
-            color: #8ab4f8; /* Havalı Chrome Mavisi */
+            color: #8ab4f8;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             user-select: none;
         }
 
         .cell:hover {
             background-color: #4f5357;
-            transform: scale(1.05);
+            transform: scale(1.04);
+            border-color: #8ab4f8;
         }
 
         .cell.x { color: #f28b82; }
         .cell.o { color: #8ab4f8; }
         .cell.x, .cell.o { cursor: not-allowed; }
 
-        /* Özür Ekranı Alanı (Başlangıçta Gizli) */
+        /* Özür Ekranı Kutusu */
         #sorry-stage {
             display: none;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(255, 71, 126, 0.4);
-            border: 4px dashed #ff477e;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 45px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(255, 71, 126, 0.35);
+            border: 3px solid #ff477e;
             text-align: center;
-            max-width: 500px;
+            max-width: 480px;
             z-index: 20;
-            animation: popUp 0.5s ease-out;
+            animation: popUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         /* Butonlar */
@@ -102,28 +106,28 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-top: 25px;
+            margin-top: 30px;
             align-items: center;
         }
 
         .btn {
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 16px 32px;
+            font-size: 1.15rem;
+            font-weight: 600;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 80%;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            width: 85%;
         }
 
         .btn-yes { background-color: #2ec4b6; color: white; }
-        .btn-yes:hover { background-color: #23a69a; transform: scale(1.05); }
+        .btn-yes:hover { background-color: #23a69a; transform: scale(1.03); }
         .btn-no { background-color: #e63946; color: white; }
-        .btn-no:hover { background-color: #d62828; transform: scale(1.05); }
+        .btn-no:hover { background-color: #d62828; transform: scale(1.03); }
 
-        /* BRAVOOO Ara Ekranı (Başlangıçta Gizli) */
+        /* BRAVOOO Ara Ekranı */
         #bravo-stage {
             display: none;
             text-align: center;
@@ -132,15 +136,16 @@
         }
 
         .bravo-text {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 900;
             color: #8ab4f8;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 3px 6px 15px rgba(0,0,0,0.6);
             margin: 0;
-            animation: pulse 0.5s infinite alternate;
+            animation: pulse 0.4s infinite alternate;
+            letter-spacing: 2px;
         }
 
-        /* YUPPIIIII En Son Ekran (Başlangıçta Gizli) */
+        /* Son Başarı Ekranı */
         #success-stage {
             display: none;
             text-align: center;
@@ -149,42 +154,33 @@
         }
 
         .yuppi-text {
-            font-size: 5rem;
+            font-size: 5.5rem;
             font-weight: 900;
             color: #ff477e;
             text-shadow: 3px 3px 0px #fff, 6px 6px 0px #ffb3c1;
             margin: 0;
-            animation: pulse 1s infinite alternate;
+            animation: pulse 0.8s infinite alternate;
         }
 
         @keyframes popUp {
-            0% { transform: scale(0.7); opacity: 0; }
+            0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
+            0% { transform: scale(0.98); }
+            100% { transform: scale(1.05); }
         }
 
-        /* --- GERÇEKÇİ/DOĞAL AYICIK VE KALP ANİMASYONLARI --- */
+        /* --- DÜZELTİLMİŞ DOĞAL AYICIK YAĞMURU --- */
         .falling-teddy {
             position: absolute;
-            font-size: 3rem;
-            z-index: 2;
-            user-select: none;
-            pointer-events: none; /* Oyuna tıklamayı engellemesin diye */
-            animation: fallDown 6s linear infinite;
-            top: -50px;
-        }
-
-        .floating-element {
-            position: absolute;
+            font-size: 2.8rem;
             z-index: 2;
             user-select: none;
             pointer-events: none;
-            animation: floatUp 5s linear infinite;
-            bottom: -50px;
+            top: -60px; /* Ekranın tamamen dışından başlar */
+            animation: fallDown 5.5s linear forwards;
         }
 
         @keyframes fallDown {
@@ -192,37 +188,24 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 0;
             }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
+            15% { opacity: 0.75; }
+            90% { opacity: 0.75; }
             100% {
-                transform: translateY(105vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% {
-                transform: translateY(-105vh) rotate(-360deg);
-                opacity: 0;
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0; /* Alta ulaştığında tamamen kaybolur */
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Dinamik Efektlerin Toplanacağı Alan (JavaScript ile doldurulacak) -->
-    <div id="effect-container"></div>
+    <!-- Dinamik Ayıcıkların Üretileceği Alan -->
+    <div id="teddy-rain-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></div>
 
     <!-- 1. AŞAMA: OYUN EKRANI -->
     <div id="game-stage" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-        <h1 id="main-title">Dünyanın en boklusu hosgeldin 💩🥰</h1>
-        <p id="sub-title">Sana kendimi affettirmem gerekiyor ama ondan once bu oyunu oynayıp beni yenmen gerekiyor osuruklu 🧸💨</p>
+        <h1 id="main-title">Dünyanın en boklusu hosgeldin</h1>
+        <p id="sub-title">Sana kendimi affettirmem gerekiyor ama ondan once bu oyunu oynayıp beni yenmen gerekiyor osuruklu</p>
         <div class="game-container">
             <div class="board" id="board">
                 <div class="cell" data-cell></div>
@@ -240,12 +223,12 @@
 
     <!-- ARA AŞAMA: BRAVOOO SÜRESİ -->
     <div id="bravo-stage">
-        <p class="bravo-text">BRAVOOO ASKIMMMMMMMMM 🎉🥳</p>
+        <p class="bravo-text">BRAVOOO ASKIMMMMMMMMM</p>
     </div>
 
     <!-- 2. AŞAMA: ÖZÜR EKRANI -->
     <div id="sorry-stage">
-        <h2 style="color: #ff477e; font-size: 1.8rem; margin-top: 0;">Özür dilerim aşkım senden habersiz dışarı çıktığım için beni affeder misin? 🥺👉👈</h2>
+        <h2 style="color: #ff477e; font-size: 1.8rem; margin-top: 0; font-weight: 700; line-height: 1.5;">Özür dilerim aşkım senden habersiz dışarı çıktığım için beni affeder misin?</h2>
         <div class="btn-container">
             <button class="btn btn-yes" onclick="selectYes()">evet ben askimi seviyom hala</button>
             <button class="btn btn-no" onclick="selectNo()">yok ben sevmiyom artik</button>
@@ -254,48 +237,39 @@
 
     <!-- 3. AŞAMA: KAZANMA/YUPPİ EKRANI -->
     <div id="success-stage">
-        <p class="yuppi-text">YUPPIIIII 🎉</p>
-        <h2 style="color: #ff477e; font-size: 2rem; margin-top: 20px;">Seni Çok Seviyorum! ❤️🧸</h2>
+        <p class="yuppi-text">YUPPIIIII</p>
+        <h2 style="color: #ff477e; font-size: 2.2rem; margin-top: 25px; font-weight: 700;">Seni Çok Seviyorum!</h2>
     </div>
 
     <script>
         const X_CLASS = 'x';
         const O_CLASS = 'o';
-        const WINNING_COMBINATIONS = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
-
         const cellElements = document.querySelectorAll('[data-cell]');
         const gameStage = document.getElementById('game-stage');
         const bravoStage = document.getElementById('bravo-stage');
         const sorryStage = document.getElementById('sorry-stage');
         const successStage = document.getElementById('success-stage');
-        const effectContainer = document.getElementById('effect-container');
+        const teddyRainContainer = document.getElementById('teddy-rain-container');
         
         let oTurn = false;
         let confettiInterval;
-        let currentStage = 'game'; // 'game' veya 'sorry'
+        let teddyInterval;
 
         startGame();
 
         function startGame() {
             oTurn = false;
-            currentStage = 'game';
             
-            // İlk temayı siyah Chrome teması yap
-            document.body.style.background = "#202124";
-            document.getElementById('main-title').style.color = "#ffffff";
-            document.getElementById('sub-title').style.color = "#9aa0a6";
+            // İlk temayı havalı gradyan siyah yap
+            document.body.style.background = "linear-gradient(135deg, #1f2023 0%, #2c2d31 100%)";
             
             gameStage.style.display = 'flex';
             bravoStage.style.display = 'none';
             sorryStage.style.display = 'none';
             successStage.style.display = 'none';
             
-            // Efektleri baştan yarat (Siyah temada yukarıdan ayıcıklar düşecek)
-            createEffects();
+            // Ayıcık yağmurunu başlat
+            startTeddyRain();
 
             cellElements.forEach(cell => {
                 cell.classList.remove(X_CLASS);
@@ -306,36 +280,27 @@
             });
         }
 
-        // --- DOĞAL VE GERÇEKÇİ EFEKT OLUŞTURUCU ---
-        function createEffects() {
-            effectContainer.innerHTML = ''; // Temizle
+        // --- SONSUZ VE KESİNTİSİZ AYICIK YAĞMURU ---
+        function startTeddyRain() {
+            clearInterval(teddyInterval);
+            teddyRainContainer.innerHTML = '';
             
-            if (currentStage === 'game') {
-                // Siyah temada ekrana rastgele dağılmış, yukarıdan düşen 15 adet ayıcık
-                for (let i = 0; i < 15; i++) {
-                    const teddy = document.createElement('div');
-                    teddy.className = 'falling-teddy';
-                    teddy.innerText = '🧸';
-                    teddy.style.left = `${Math.random() * 95}%`;
-                    teddy.style.animationDelay = `${Math.random() * 5}s`;
-                    teddy.style.animationDuration = `${4 + Math.random() * 4}s`; // Farklı hızlar
-                    teddy.style.fontSize = `${2 + Math.random() * 2.5}rem`; // Farklı boyutlar
-                    effectContainer.appendChild(teddy);
-                }
-            } else if (currentStage === 'sorry') {
-                // Pembe temada aşağıdan yukarıya uçuşan ayıcıklar ve kalpler karışık
-                const elements = ['🧸', '❤️', '💖', '💕', '💗'];
-                for (let i = 0; i < 25; i++) {
-                    const el = document.createElement('div');
-                    el.className = 'floating-element';
-                    el.innerText = elements[Math.floor(Math.random() * elements.length)];
-                    el.style.left = `${Math.random() * 95}%`;
-                    el.style.animationDelay = `${Math.random() * 5}s`;
-                    el.style.animationDuration = `${3 + Math.random() * 4}s`;
-                    el.style.fontSize = `${1.5 + Math.random() * 2.5}rem`;
-                    effectContainer.appendChild(el);
-                }
-            }
+            // Sürekli yeni ayıcık üreten döngü
+            teddyInterval = setInterval(() => {
+                const teddy = document.createElement('div');
+                teddy.className = 'falling-teddy';
+                teddy.innerText = '🧸';
+                teddy.style.left = `${Math.random() * 95}%`;
+                teddy.style.animationDuration = `${4.5 + Math.random() * 3}s`; // Rastgele hızlar
+                teddy.style.fontSize = `${2 + Math.random() * 2}rem`; // Rastgele boyutlar
+                
+                teddyRainContainer.appendChild(teddy);
+
+                // Animasyon bitince ayıcığı sil (tarayıcıyı yormasın diye)
+                setTimeout(() => {
+                    teddy.remove();
+                }, 7500);
+            }, 400); // Her 400 milisaniyede bir yeni ayıcık düşer
         }
 
         function handleClick(e) {
@@ -347,11 +312,11 @@
             if (checkWin(X_CLASS)) {
                 handleWinTransition();
             } else if (isDraw()) {
-                alert("Beraberlik! Ayıcıklar seni engelledi, tekrar dene boklu! 🧸💩");
+                alert("Beraberlik! Tekrar dene boklu!");
                 startGame();
             } else {
                 oTurn = true;
-                setTimeout(aiMove, 500);
+                setTimeout(aiMove, 400);
             }
         }
 
@@ -361,6 +326,11 @@
         }
 
         function checkWin(currentClass) {
+            const WINNING_COMBINATIONS = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
             return WINNING_COMBINATIONS.some(combination => {
                 return combination.every(index => {
                     return cellElements[index].classList.contains(currentClass);
@@ -374,29 +344,31 @@
             });
         }
 
+        // --- KAZANMA ANINDAKİ GEÇİŞ ---
         function handleWinTransition() {
             gameStage.style.display = 'none'; 
             bravoStage.style.display = 'block'; 
             
+            // Konfetiyi patlat
             startConfettiLoop();
 
             setTimeout(() => {
                 stopConfettiLoop();
+                clearInterval(teddyInterval);
+                teddyRainContainer.innerHTML = '';
                 bravoStage.style.display = 'none';
-                currentStage = 'sorry';
                 
-                // Pembe temaya geçiş
-                document.body.style.background = "linear-gradient(135deg, #ffe5ec, #ffc2d1)";
-                createEffects(); // Aşağıdan yukarıya kalpli ayıcıklı uçuşmayı başlat
+                // Geliştirilmiş Pembe Aşk Gradyanı
+                document.body.style.background = "linear-gradient(135deg, #ffafcc 0%, #ffc2d1 100%)";
                 sorryStage.style.display = 'block'; 
             }, 3000);
         }
 
         function startConfettiLoop() {
             confettiInterval = setInterval(() => {
-                confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 } });
-                confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 } });
-            }, 150);
+                confetti({ particleCount: 8, angle: 60, spread: 60, origin: { x: 0 } });
+                confetti({ particleCount: 8, angle: 120, spread: 60, origin: { x: 1 } });
+            }, 130);
         }
 
         function stopConfettiLoop() {
@@ -404,7 +376,7 @@
         }
 
         function selectNo() {
-            alert("Hataaa! Yanlış şıkkı seçtin aşkım, ceza olarak tekrar oynuyorsun! 😜💩");
+            alert("Hataaa! Yanlış şıkkı seçtin aşkım, ceza olarak tekrar oynuyorsun!");
             startGame();
         }
 
@@ -416,57 +388,41 @@
             var end = Date.now() + duration;
 
             (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                confetti({ particleCount: 6, angle: 60, spread: 60, origin: { x: 0 } });
+                confetti({ particleCount: 6, angle: 120, spread: 60, origin: { x: 1 } });
                 if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
 
-        // Yapay Zeka Mekanizması
+        // --- KÖTÜLEŞTİRİLMİŞ YAPAY ZEKA (KOLAY BOT) ---
         function aiMove() {
             if (!oTurn) return;
-            let move = -1;
+            
+            // Zeka mantığı tamamen kaldırıldı. Sadece boş olan yerleri bulup rastgele birine basıyor.
+            const availableMoves = [];
+            cellElements.forEach((cell, index) => {
+                if (!cell.classList.contains(X_CLASS) && !cell.classList.contains(O_CLASS)) {
+                    availableMoves.push(index);
+                }
+            });
 
-            move = findBestMove(O_CLASS);
-            if (move === -1) move = findBestMove(X_CLASS);
-            if (move === -1 && !cellElements[4].classList.contains(X_CLASS) && !cellElements[4].classList.contains(O_CLASS)) move = 4;
-
-            if (move === -1) {
-                const availableMoves = [];
-                cellElements.forEach((cell, index) => {
-                    if (!cell.classList.contains(X_CLASS) && !cell.classList.contains(O_CLASS)) availableMoves.push(index);
-                });
-                if (availableMoves.length > 0) move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-            }
-
-            if (move !== -1) {
-                const targetCell = cellElements[move];
+            if (availableMoves.length > 0) {
+                const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                const targetCell = cellElements[randomMove];
+                
                 placeMark(targetCell, 'O', O_CLASS);
                 targetCell.removeEventListener('click', handleClick);
 
                 if (checkWin(O_CLASS)) {
-                    alert("Ayıcıklar kazandı! 🧸 Tekrar dene, affetmek için beni yenmelisin boklu!");
+                    alert("Yenildin boklu!");
                     startGame();
                 } else if (isDraw()) {
-                    alert("Beraberlik! Tekrar dene! 🧸");
+                    alert("Beraberlik! Tekrar dene boklu!");
                     startGame();
                 } else {
                     oTurn = false;
                 }
             }
-        }
-
-        function findBestMove(currentClass) {
-            for (let combination of WINNING_COMBINATIONS) {
-                let count = 0;
-                let emptyIndex = -1;
-                for (let index of combination) {
-                    if (cellElements[index].classList.contains(currentClass)) count++;
-                    else if (!cellElements[index].classList.contains(X_CLASS) && !cellElements[index].classList.contains(O_CLASS)) emptyIndex = index;
-                }
-                if (count === 2 && emptyIndex !== -1) return emptyIndex;
-            }
-            return -1;
         }
     </script>
 </body>
