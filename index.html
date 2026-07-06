@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eylül'e Özel 🧸❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* Genel Sayfa Tasarımı */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Başlık Alanı */
+        h1 {
+            color: #ff477e;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 10;
+        }
+
+        p {
+            color: #ff7096;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* XOX Oyun Tahtası Alanı */
+        .game-container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 71, 126, 0.2);
+            border: 3px solid #ff85a1;
+            z-index: 10;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+        }
+
+        .cell {
+            background-color: #fff;
+            border: 2px solid #ffb3c1;
+            border-radius: 15px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff477e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .cell:hover {
+            background-color: #ffe5ec;
+            transform: scale(1.05);
+        }
+
+        .cell.x, .cell.o {
+            cursor: not-allowed;
+        }
+        .cell.o {
+            color: #4a90e2;
+        }
+
+        /* Özür Ekranı Alanı (Başlangıçta Gizli) */
+        #sorry-stage {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(255, 71, 126, 0.3);
+            border: 4px dashed #ff477e;
+            text-align: center;
+            max-width: 500px;
+            z-index: 20;
+            animation: popUp 0.5s ease-out;
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Butonlar */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 80%;
+        }
+
+        .btn-yes {
+            background-color: #2ec4b6;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: #23a69a;
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #e63946;
+            color: white;
+        }
+
+        .btn-no:hover {
+            background-color: #d62828;
+            transform: scale(1.05);
+        }
+
+        /* YUPPIIIII Ekranı (Başlangıçta Gizli) */
+        #success-stage {
+            display: none;
+            text-align: center;
+            z-index: 30;
+            animation: popUp 0.5s ease-out;
+        }
+
+        .yuppi-text {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #ff477e;
+            text-shadow: 3px 3px 0px #fff, 6px 6px 0px #ffb3c1;
+            margin: 0;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Tatlı Ayıcıklar */
+        .teddy {
+            position: absolute;
+            bottom: 20px;
+            font-size: 5rem;
+            z-index: 5;
+            user-select: none;
+        }
+        .teddy-left { left: 40px; transform: scaleX(-1); }
+        .teddy-right { right: 40px; }
+
+        /* Uçuşan Kalp Animasyonları */
+        .heart {
+            position: absolute;
+            color: #ff477e;
+            font-size: 1.5rem;
+            animation: floatUp 5s linear infinite;
+            bottom: -50px;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart" style="left: 10%; animation-delay: 0s; font-size: 2rem;">❤️</div>
+    <div class="heart" style="left: 25%; animation-delay: 2s; font-size: 1.5rem;">💖</div>
+    <div class="heart" style="left: 40%; animation-delay: 1s; font-size: 2.5rem;">💕</div>
+    <div class="heart" style="left: 65%; animation-delay: 3s; font-size: 1.8rem;">❤️</div>
+    <div class="heart" style="left: 80%; animation-delay: 0.5s; font-size: 2.2rem;">💗</div>
+
+    <div id="game-stage" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <h1>Hoş Geldin Dünyanın En Tatlı Kız Arkadaşı! 🥰</h1>
+        <p>Sana kendini affettirmek isteyen bir ayıcık var burada... Önce oyunu kazanman lazım!</p>
+        <div class="game-container">
+            <div class="board" id="board">
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sorry-stage">
+        <h2 style="color: #ff477e; font-size: 2rem; margin-top: 0;">Özür dilerim aşkım senden habersiz dışarı çıktığım için beni affeder misin? 🥺👉👈</h2>
+        <div class="btn-container">
+            <button class="btn btn-yes" onclick="selectYes()">evet ben askimi seviyom hala</button>
+            <button class="btn btn-no" onclick="selectNo()">yok ben sevmiyom artik</button>
+        </div>
+    </div>
+
+    <div id="success-stage">
+        <p class="yuppi-text">YUPPIIIII 🎉</p>
+        <h2 style="color: #ff477e; font-size: 2rem; margin-top: 20px;">Seni Çok Seviyorum! ❤️🧸</h2>
+    </div>
+
+    <div class="teddy teddy-left">🧸</div>
+    <div class="teddy teddy-right">🧸</div>
+
+    <script>
+        const X_CLASS = 'x';
+        const O_CLASS = 'o';
+        const WINNING_COMBINATIONS = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        const cellElements = document.querySelectorAll('[data-cell]');
+        const gameStage = document.getElementById('game-stage');
+        const sorryStage = document.getElementById('sorry-stage');
+        const successStage = document.getElementById('success-stage');
+        let oTurn = false;
+
+        startGame();
+
+        function startGame() {
+            oTurn = false;
+            gameStage.style.display = 'flex';
+            sorryStage.style.display = 'none';
+            successStage.style.display = 'none';
+            
+            cellElements.forEach(cell => {
+                cell.classList.remove(X_CLASS);
+                cell.classList.remove(O_CLASS);
+                cell.innerText = '';
+                cell.removeEventListener('click', handleClick);
+                cell.addEventListener('click', handleClick, { once: true });
+            });
+        }
+
+        function handleClick(e) {
+            const cell = e.target;
+            if (cell.classList.contains(X_CLASS) || cell.classList.contains(O_CLASS) || oTurn) return;
+
+            placeMark(cell, 'X', X_CLASS);
+
+            if (checkWin(X_CLASS)) {
+                endGame();
+            } else if (isDraw()) {
+                alert("Beraberlik! Ayıcık seni çok zorluyor, tekrar dene aşkım! 🧸");
+                startGame();
+            } else {
+                oTurn = true;
+                setTimeout(aiMove, 600);
+            }
+        }
+
+        function placeMark(cell, text, currentClass) {
+            cell.classList.add(currentClass);
+            cell.innerText = text;
+        }
+
+        function checkWin(currentClass) {
+            return WINNING_COMBINATIONS.some(combination => {
+                return combination.every(index => {
+                    return cellElements[index].classList.contains(currentClass);
+                });
+            });
+        }
+
+        function isDraw() {
+            return [...cellElements].every(cell => {
+                return cell.classList.contains(X_CLASS) || cell.classList.contains(O_CLASS);
+            });
+        }
+
+        // Eylül oyunu kazandığında tetiklenen yer
+        function endGame() {
+            setTimeout(() => {
+                gameStage.style.display = 'none'; // Oyun tahtasını gizle
+                sorryStage.style.display = 'block'; // Özür ekranını aç
+            }, 500);
+        }
+
+        // "Yok ben sevmiyom artik" butonuna basınca
+        function selectNo() {
+            alert("Hataaa! Yanlış şıkkı seçtin aşkım, ceza olarak tekrar oynuyorsun! 😜🧸");
+            startGame(); // Oyunu en başa sarar
+        }
+
+        // "Evet ben askimi seviyom hala" butonuna basınca
+        function selectYes() {
+            sorryStage.style.display = 'none';
+            successStage.style.display = 'block';
+            
+            // Sürekli konfeti patlatma efekti döngüsü
+            var duration = 5 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // Yapay Zeka Mekanizması
+        function aiMove() {
+            if (!oTurn) return;
+            let move = -1;
+
+            move = findBestMove(O_CLASS); // Kazanmayı dene
+            if (move === -1) move = findBestMove(X_CLASS); // Blokla
+            
+            if (move === -1 && !cellElements[4].classList.contains(X_CLASS) && !cellElements[4].classList.contains(O_CLASS)) {
+                move = 4; // Merkeze oyna
+            }
+
+            if (move === -1) { // Rastgele oyna
+                const availableMoves = [];
+                cellElements.forEach((cell, index) => {
+                    if (!cell.classList.contains(X_CLASS) && !cell.classList.contains(O_CLASS)) availableMoves.push(index);
+                });
+                if (availableMoves.length > 0) {
+                    move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                }
+            }
+
+            if (move !== -1) {
+                const targetCell = cellElements[move];
+                placeMark(targetCell, 'O', O_CLASS);
+                targetCell.removeEventListener('click', handleClick);
+
+                if (checkWin(O_CLASS)) {
+                    alert("Ayıcık kazandı! 🧸 Tekrar dene, affetmek için kazanmalısın aşkım!");
+                    startGame();
+                } else if (isDraw()) {
+                    alert("Beraberlik! Hadi bir daha dene aşkım! 🧸");
+                    startGame();
+                } else {
+                    oTurn = false;
+                }
+            }
+        }
+
+        function findBestMove(currentClass) {
+            for (let combination of WINNING_COMBINATIONS) {
+                let count = 0;
+                let emptyIndex = -1;
+                for (let index of combination) {
+                    if (cellElements[index].classList.contains(currentClass)) count++;
+                    else if (!cellElements[index].classList.contains(X_CLASS) && !cellElements[index].classList.contains(O_CLASS)) emptyIndex = index;
+                }
+                if (count === 2 && emptyIndex !== -1) return emptyIndex;
+            }
+            return -1;
+        }
+    </script>
+</body>
+</html>
