@@ -6,11 +6,11 @@
     <title>Eylül'e Özel 🧸❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* Genel Sayfa Tasarımı */
+        /* Genel Sayfa Tasarımı (Başlangıçta Havalı Chrome Dark Teması) */
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            background: #202124; /* Chrome Dark Mode Arka Planı */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -19,20 +19,21 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
+            transition: background 1s ease; /* Pembe temaya yumuşak geçiş için */
         }
 
-        /* Başlık Alanı */
+        /* Başlık Alanları */
         h1 {
-            color: #ff477e;
+            color: #ffffff;
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             text-align: center;
             z-index: 10;
         }
 
         p {
-            color: #ff7096;
+            color: #9aa0a6; /* Chrome gri yazı rengi */
             font-size: 1.2rem;
             margin-bottom: 20px;
             font-weight: bold;
@@ -42,11 +43,11 @@
 
         /* XOX Oyun Tahtası Alanı */
         .game-container {
-            background: rgba(255, 255, 255, 0.85);
+            background: #292a2d; /* Chrome daha koyu panel rengi */
             padding: 20px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 71, 126, 0.2);
-            border: 3px solid #ff85a1;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 3px solid #3c4043;
             z-index: 10;
         }
 
@@ -58,12 +59,12 @@
         }
 
         .cell {
-            background-color: #fff;
-            border: 2px solid #ffb3c1;
+            background-color: #35363a;
+            border: 2px solid #5f6368;
             border-radius: 15px;
             font-size: 2.5rem;
             font-weight: bold;
-            color: #ff477e;
+            color: #8ab4f8; /* Havalı Chrome Mavisi */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -73,34 +74,32 @@
         }
 
         .cell:hover {
-            background-color: #ffe5ec;
+            background-color: #4f5357;
             transform: scale(1.05);
         }
 
-        .cell.x, .cell.o {
-            cursor: not-allowed;
+        .cell.x {
+            color: #f28b82; /* Eylül'ün rengi havalı kırmızı-pembe */
         }
         .cell.o {
-            color: #4a90e2;
+            color: #8ab4f8; /* Yapay zeka */
+        }
+        .cell.x, .cell.o {
+            cursor: not-allowed;
         }
 
         /* Özür Ekranı Alanı (Başlangıçta Gizli) */
         #sorry-stage {
             display: none;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(255, 71, 126, 0.3);
+            box-shadow: 0 15px 35px rgba(255, 71, 126, 0.4);
             border: 4px dashed #ff477e;
             text-align: center;
             max-width: 500px;
             z-index: 20;
             animation: popUp 0.5s ease-out;
-        }
-
-        @keyframes popUp {
-            0% { transform: scale(0.7); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
         }
 
         /* Butonlar */
@@ -124,27 +123,29 @@
             width: 80%;
         }
 
-        .btn-yes {
-            background-color: #2ec4b6;
-            color: white;
+        .btn-yes { background-color: #2ec4b6; color: white; }
+        .btn-yes:hover { background-color: #23a69a; transform: scale(1.05); }
+        .btn-no { background-color: #e63946; color: white; }
+        .btn-no:hover { background-color: #d62828; transform: scale(1.05); }
+
+        /* BRAVOOO Ara Ekranı (Başlangıçta Gizli) */
+        #bravo-stage {
+            display: none;
+            text-align: center;
+            z-index: 30;
+            animation: popUp 0.4s ease-out;
         }
 
-        .btn-yes:hover {
-            background-color: #23a69a;
-            transform: scale(1.05);
+        .bravo-text {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #8ab4f8;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            margin: 0;
+            animation: pulse 0.5s infinite alternate;
         }
 
-        .btn-no {
-            background-color: #e63946;
-            color: white;
-        }
-
-        .btn-no:hover {
-            background-color: #d62828;
-            transform: scale(1.05);
-        }
-
-        /* YUPPIIIII Ekranı (Başlangıçta Gizli) */
+        /* YUPPIIIII En Son Ekran (Başlangıçta Gizli) */
         #success-stage {
             display: none;
             text-align: center;
@@ -161,23 +162,34 @@
             animation: pulse 1s infinite alternate;
         }
 
+        @keyframes popUp {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         @keyframes pulse {
             0% { transform: scale(1); }
             100% { transform: scale(1.1); }
         }
 
-        /* Tatlı Ayıcıklar */
-        .teddy {
+        /* Çoğaltılmış Ayıcık Ordusu Alanı */
+        .teddy-army {
             position: absolute;
-            bottom: 20px;
-            font-size: 5rem;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            font-size: 4.5rem;
             z-index: 5;
             user-select: none;
+            padding-bottom: 10px;
         }
-        .teddy-left { left: 40px; transform: scaleX(-1); }
-        .teddy-right { right: 40px; }
 
-        /* Uçuşan Kalp Animasyonları */
+        /* Uçuşan Kalp Animasyonları (Başlangıçta Gizli - Pembe Temada Açılacak) */
+        .heart-container {
+            display: none;
+        }
         .heart {
             position: absolute;
             color: #ff477e;
@@ -196,15 +208,18 @@
 </head>
 <body>
 
-    <div class="heart" style="left: 10%; animation-delay: 0s; font-size: 2rem;">❤️</div>
-    <div class="heart" style="left: 25%; animation-delay: 2s; font-size: 1.5rem;">💖</div>
-    <div class="heart" style="left: 40%; animation-delay: 1s; font-size: 2.5rem;">💕</div>
-    <div class="heart" style="left: 65%; animation-delay: 3s; font-size: 1.8rem;">❤️</div>
-    <div class="heart" style="left: 80%; animation-delay: 0.5s; font-size: 2.2rem;">💗</div>
+    <div class="heart-container" id="hearts">
+        <div class="heart" style="left: 5%; animation-delay: 0s; font-size: 2rem;">❤️</div>
+        <div class="heart" style="left: 15%; animation-delay: 2s; font-size: 1.5rem;">💖</div>
+        <div class="heart" style="left: 30%; animation-delay: 1s; font-size: 2.5rem;">💕</div>
+        <div class="heart" style="left: 50%; animation-delay: 3s; font-size: 1.8rem;">❤️</div>
+        <div class="heart" style="left: 70%; animation-delay: 0.5s; font-size: 2.2rem;">💗</div>
+        <div class="heart" style="left: 85%; animation-delay: 1.5s; font-size: 2rem;">💖</div>
+    </div>
 
     <div id="game-stage" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-        <h1>Hoş Geldin Dünyanın En Tatlı Kız Arkadaşı! 🥰</h1>
-        <p>Sana kendini affettirmek isteyen bir ayıcık var burada... Önce oyunu kazanman lazım!</p>
+        <h1 id="main-title">Dünyanın en boklusu hosgeldin 💩🥰</h1>
+        <p id="sub-title">Sana kendimi affettirmem gerekiyor ama ondan once bu oyunu oynayıp beni yenmen gerekiyor osuruklu 🧸💨</p>
         <div class="game-container">
             <div class="board" id="board">
                 <div class="cell" data-cell></div>
@@ -220,8 +235,12 @@
         </div>
     </div>
 
+    <div id="bravo-stage">
+        <p class="bravo-text">BRAVOOO ASKIMMMMMMMMM 🎉🥳</p>
+    </div>
+
     <div id="sorry-stage">
-        <h2 style="color: #ff477e; font-size: 2rem; margin-top: 0;">Özür dilerim aşkım senden habersiz dışarı çıktığım için beni affeder misin? 🥺👉👈</h2>
+        <h2 style="color: #ff477e; font-size: 1.8rem; margin-top: 0;">Özür dilerim aşkım senden habersiz dışarı çıktığım için beni affeder misin? 🥺👉👈</h2>
         <div class="btn-container">
             <button class="btn btn-yes" onclick="selectYes()">evet ben askimi seviyom hala</button>
             <button class="btn btn-no" onclick="selectNo()">yok ben sevmiyom artik</button>
@@ -233,8 +252,14 @@
         <h2 style="color: #ff477e; font-size: 2rem; margin-top: 20px;">Seni Çok Seviyorum! ❤️🧸</h2>
     </div>
 
-    <div class="teddy teddy-left">🧸</div>
-    <div class="teddy teddy-right">🧸</div>
+    <div class="teddy-army" id="teddy-container">
+        <div>🧸</div>
+        <div>🧸</div>
+        <div>🧸</div>
+        <div>🧸</div>
+        <div>🧸</div>
+        <div>🧸</div>
+    </div>
 
     <script>
         const X_CLASS = 'x';
@@ -247,17 +272,29 @@
 
         const cellElements = document.querySelectorAll('[data-cell]');
         const gameStage = document.getElementById('game-stage');
+        const bravoStage = document.getElementById('bravo-stage');
         const sorryStage = document.getElementById('sorry-stage');
         const successStage = document.getElementById('success-stage');
+        const teddyContainer = document.getElementById('teddy-container');
+        const heartContainer = document.getElementById('hearts');
         let oTurn = false;
+        let confettiInterval;
 
         startGame();
 
         function startGame() {
             oTurn = false;
+            // İlk temayı siyah Chrome teması yap
+            document.body.style.background = "#202124";
+            document.getElementById('main-title').style.color = "#ffffff";
+            document.getElementById('sub-title').style.color = "#9aa0a6";
+            
             gameStage.style.display = 'flex';
+            bravoStage.style.display = 'none';
             sorryStage.style.display = 'none';
             successStage.style.display = 'none';
+            teddyContainer.style.display = 'flex';
+            heartContainer.style.display = 'none';
             
             cellElements.forEach(cell => {
                 cell.classList.remove(X_CLASS);
@@ -275,13 +312,13 @@
             placeMark(cell, 'X', X_CLASS);
 
             if (checkWin(X_CLASS)) {
-                endGame();
+                handleWinTransition();
             } else if (isDraw()) {
-                alert("Beraberlik! Ayıcık seni çok zorluyor, tekrar dene aşkım! 🧸");
+                alert("Beraberlik! Ayıcık ordusu seni engelledi, tekrar dene boklu! 🧸💩");
                 startGame();
             } else {
                 oTurn = true;
-                setTimeout(aiMove, 600);
+                setTimeout(aiMove, 500);
             }
         }
 
@@ -304,46 +341,54 @@
             });
         }
 
-        // Eylül oyunu kazandığında tetiklenen yer
-        function endGame() {
+        // --- YENİ EKLENEN KAZANMA GEÇİŞİ VE BRAVO EKRANI ---
+        function handleWinTransition() {
+            gameStage.style.display = 'none'; // Oyunu gizle
+            bravoStage.style.display = 'block'; // BRAVOOO yazısını göster
+            
+            // Konfetileri hemen başlat
+            startConfettiLoop();
+
+            // 3 saniye (3000ms) bekle ve sonra pembe özür ekranına geç
             setTimeout(() => {
-                gameStage.style.display = 'none'; // Oyun tahtasını gizle
-                sorryStage.style.display = 'block'; // Özür ekranını aç
-            }, 500);
+                stopConfettiLoop();
+                bravoStage.style.display = 'none';
+                teddyContainer.style.display = 'none'; // Ayıcıkları gizle (İsteğe göre kalabilir)
+                
+                // PEMBE VE KALPLİ AŞK TEMASINA GEÇİŞ
+                document.body.style.background = "linear-gradient(135deg, #ffe5ec, #ffc2d1)";
+                heartContainer.style.display = 'block'; // Kalpleri uçurt
+                sorryStage.style.display = 'block'; // Özür sorusunu aç
+            }, 3000);
         }
 
-        // "Yok ben sevmiyom artik" butonuna basınca
+        function startConfettiLoop() {
+            confettiInterval = setInterval(() => {
+                confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 } });
+            }, 150);
+        }
+
+        function stopConfettiLoop() {
+            clearInterval(confettiInterval);
+        }
+
         function selectNo() {
-            alert("Hataaa! Yanlış şıkkı seçtin aşkım, ceza olarak tekrar oynuyorsun! 😜🧸");
-            startGame(); // Oyunu en başa sarar
+            alert("Hataaa! Yanlış şıkkı seçtin aşkım, ceza olarak tekrar oynuyorsun! 😜💩");
+            startGame();
         }
 
-        // "Evet ben askimi seviyom hala" butonuna basınca
         function selectYes() {
             sorryStage.style.display = 'none';
             successStage.style.display = 'block';
             
-            // Sürekli konfeti patlatma efekti döngüsü
-            var duration = 5 * 1000;
+            var duration = 6 * 1000;
             var end = Date.now() + duration;
 
             (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 }
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 }
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
 
@@ -352,21 +397,16 @@
             if (!oTurn) return;
             let move = -1;
 
-            move = findBestMove(O_CLASS); // Kazanmayı dene
-            if (move === -1) move = findBestMove(X_CLASS); // Blokla
-            
-            if (move === -1 && !cellElements[4].classList.contains(X_CLASS) && !cellElements[4].classList.contains(O_CLASS)) {
-                move = 4; // Merkeze oyna
-            }
+            move = findBestMove(O_CLASS);
+            if (move === -1) move = findBestMove(X_CLASS);
+            if (move === -1 && !cellElements[4].classList.contains(X_CLASS) && !cellElements[4].classList.contains(O_CLASS)) move = 4;
 
-            if (move === -1) { // Rastgele oyna
+            if (move === -1) {
                 const availableMoves = [];
                 cellElements.forEach((cell, index) => {
                     if (!cell.classList.contains(X_CLASS) && !cell.classList.contains(O_CLASS)) availableMoves.push(index);
                 });
-                if (availableMoves.length > 0) {
-                    move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-                }
+                if (availableMoves.length > 0) move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
             }
 
             if (move !== -1) {
@@ -375,10 +415,10 @@
                 targetCell.removeEventListener('click', handleClick);
 
                 if (checkWin(O_CLASS)) {
-                    alert("Ayıcık kazandı! 🧸 Tekrar dene, affetmek için kazanmalısın aşkım!");
+                    alert("Ayıcık ordusu kazandı! 🧸 Tekrar dene, affetmek için beni yenmelisin boklu!");
                     startGame();
                 } else if (isDraw()) {
-                    alert("Beraberlik! Hadi bir daha dene aşkım! 🧸");
+                    alert("Beraberlik! Tekrar dene! 🧸");
                     startGame();
                 } else {
                     oTurn = false;
