@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eylül'e Özel 🧸❤️</title>
+    <!-- Konfeti efekti için gerekli kütüphane -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         /* Genel Sayfa Tasarımı (Başlangıçta Havalı Chrome Dark Teması) */
@@ -78,15 +79,9 @@
             transform: scale(1.05);
         }
 
-        .cell.x {
-            color: #f28b82; /* Eylül'ün rengi havalı kırmızı-pembe */
-        }
-        .cell.o {
-            color: #8ab4f8; /* Yapay zeka */
-        }
-        .cell.x, .cell.o {
-            cursor: not-allowed;
-        }
+        .cell.x { color: #f28b82; }
+        .cell.o { color: #8ab4f8; }
+        .cell.x, .cell.o { cursor: not-allowed; }
 
         /* Özür Ekranı Alanı (Başlangıçta Gizli) */
         #sorry-stage {
@@ -172,51 +167,59 @@
             100% { transform: scale(1.1); }
         }
 
-        /* Çoğaltılmış Ayıcık Ordusu Alanı */
-        .teddy-army {
+        /* --- GERÇEKÇİ/DOĞAL AYICIK VE KALP ANİMASYONLARI --- */
+        .falling-teddy {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            font-size: 4.5rem;
-            z-index: 5;
+            font-size: 3rem;
+            z-index: 2;
             user-select: none;
-            padding-bottom: 10px;
+            pointer-events: none; /* Oyuna tıklamayı engellemesin diye */
+            animation: fallDown 6s linear infinite;
+            top: -50px;
         }
 
-        /* Uçuşan Kalp Animasyonları (Başlangıçta Gizli - Pembe Temada Açılacak) */
-        .heart-container {
-            display: none;
-        }
-        .heart {
+        .floating-element {
             position: absolute;
-            color: #ff477e;
-            font-size: 1.5rem;
+            z-index: 2;
+            user-select: none;
+            pointer-events: none;
             animation: floatUp 5s linear infinite;
             bottom: -50px;
-            opacity: 0.7;
-            z-index: 1;
+        }
+
+        @keyframes fallDown {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% {
+                transform: translateY(-105vh) rotate(-360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="heart-container" id="hearts">
-        <div class="heart" style="left: 5%; animation-delay: 0s; font-size: 2rem;">❤️</div>
-        <div class="heart" style="left: 15%; animation-delay: 2s; font-size: 1.5rem;">💖</div>
-        <div class="heart" style="left: 30%; animation-delay: 1s; font-size: 2.5rem;">💕</div>
-        <div class="heart" style="left: 50%; animation-delay: 3s; font-size: 1.8rem;">❤️</div>
-        <div class="heart" style="left: 70%; animation-delay: 0.5s; font-size: 2.2rem;">💗</div>
-        <div class="heart" style="left: 85%; animation-delay: 1.5s; font-size: 2rem;">💖</div>
-    </div>
+    <!-- Dinamik Efektlerin Toplanacağı Alan (JavaScript ile doldurulacak) -->
+    <div id="effect-container"></div>
 
+    <!-- 1. AŞAMA: OYUN EKRANI -->
     <div id="game-stage" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
         <h1 id="main-title">Dünyanın en boklusu hosgeldin 💩🥰</h1>
         <p id="sub-title">Sana kendimi affettirmem gerekiyor ama ondan once bu oyunu oynayıp beni yenmen gerekiyor osuruklu 🧸💨</p>
@@ -235,10 +238,12 @@
         </div>
     </div>
 
+    <!-- ARA AŞAMA: BRAVOOO SÜRESİ -->
     <div id="bravo-stage">
         <p class="bravo-text">BRAVOOO ASKIMMMMMMMMM 🎉🥳</p>
     </div>
 
+    <!-- 2. AŞAMA: ÖZÜR EKRANI -->
     <div id="sorry-stage">
         <h2 style="color: #ff477e; font-size: 1.8rem; margin-top: 0;">Özür dilerim aşkım senden habersiz dışarı çıktığım için beni affeder misin? 🥺👉👈</h2>
         <div class="btn-container">
@@ -247,18 +252,10 @@
         </div>
     </div>
 
+    <!-- 3. AŞAMA: KAZANMA/YUPPİ EKRANI -->
     <div id="success-stage">
         <p class="yuppi-text">YUPPIIIII 🎉</p>
         <h2 style="color: #ff477e; font-size: 2rem; margin-top: 20px;">Seni Çok Seviyorum! ❤️🧸</h2>
-    </div>
-
-    <div class="teddy-army" id="teddy-container">
-        <div>🧸</div>
-        <div>🧸</div>
-        <div>🧸</div>
-        <div>🧸</div>
-        <div>🧸</div>
-        <div>🧸</div>
     </div>
 
     <script>
@@ -275,15 +272,18 @@
         const bravoStage = document.getElementById('bravo-stage');
         const sorryStage = document.getElementById('sorry-stage');
         const successStage = document.getElementById('success-stage');
-        const teddyContainer = document.getElementById('teddy-container');
-        const heartContainer = document.getElementById('hearts');
+        const effectContainer = document.getElementById('effect-container');
+        
         let oTurn = false;
         let confettiInterval;
+        let currentStage = 'game'; // 'game' veya 'sorry'
 
         startGame();
 
         function startGame() {
             oTurn = false;
+            currentStage = 'game';
+            
             // İlk temayı siyah Chrome teması yap
             document.body.style.background = "#202124";
             document.getElementById('main-title').style.color = "#ffffff";
@@ -293,9 +293,10 @@
             bravoStage.style.display = 'none';
             sorryStage.style.display = 'none';
             successStage.style.display = 'none';
-            teddyContainer.style.display = 'flex';
-            heartContainer.style.display = 'none';
             
+            // Efektleri baştan yarat (Siyah temada yukarıdan ayıcıklar düşecek)
+            createEffects();
+
             cellElements.forEach(cell => {
                 cell.classList.remove(X_CLASS);
                 cell.classList.remove(O_CLASS);
@@ -303,6 +304,38 @@
                 cell.removeEventListener('click', handleClick);
                 cell.addEventListener('click', handleClick, { once: true });
             });
+        }
+
+        // --- DOĞAL VE GERÇEKÇİ EFEKT OLUŞTURUCU ---
+        function createEffects() {
+            effectContainer.innerHTML = ''; // Temizle
+            
+            if (currentStage === 'game') {
+                // Siyah temada ekrana rastgele dağılmış, yukarıdan düşen 15 adet ayıcık
+                for (let i = 0; i < 15; i++) {
+                    const teddy = document.createElement('div');
+                    teddy.className = 'falling-teddy';
+                    teddy.innerText = '🧸';
+                    teddy.style.left = `${Math.random() * 95}%`;
+                    teddy.style.animationDelay = `${Math.random() * 5}s`;
+                    teddy.style.animationDuration = `${4 + Math.random() * 4}s`; // Farklı hızlar
+                    teddy.style.fontSize = `${2 + Math.random() * 2.5}rem`; // Farklı boyutlar
+                    effectContainer.appendChild(teddy);
+                }
+            } else if (currentStage === 'sorry') {
+                // Pembe temada aşağıdan yukarıya uçuşan ayıcıklar ve kalpler karışık
+                const elements = ['🧸', '❤️', '💖', '💕', '💗'];
+                for (let i = 0; i < 25; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'floating-element';
+                    el.innerText = elements[Math.floor(Math.random() * elements.length)];
+                    el.style.left = `${Math.random() * 95}%`;
+                    el.style.animationDelay = `${Math.random() * 5}s`;
+                    el.style.animationDuration = `${3 + Math.random() * 4}s`;
+                    el.style.fontSize = `${1.5 + Math.random() * 2.5}rem`;
+                    effectContainer.appendChild(el);
+                }
+            }
         }
 
         function handleClick(e) {
@@ -314,7 +347,7 @@
             if (checkWin(X_CLASS)) {
                 handleWinTransition();
             } else if (isDraw()) {
-                alert("Beraberlik! Ayıcık ordusu seni engelledi, tekrar dene boklu! 🧸💩");
+                alert("Beraberlik! Ayıcıklar seni engelledi, tekrar dene boklu! 🧸💩");
                 startGame();
             } else {
                 oTurn = true;
@@ -341,24 +374,21 @@
             });
         }
 
-        // --- YENİ EKLENEN KAZANMA GEÇİŞİ VE BRAVO EKRANI ---
         function handleWinTransition() {
-            gameStage.style.display = 'none'; // Oyunu gizle
-            bravoStage.style.display = 'block'; // BRAVOOO yazısını göster
+            gameStage.style.display = 'none'; 
+            bravoStage.style.display = 'block'; 
             
-            // Konfetileri hemen başlat
             startConfettiLoop();
 
-            // 3 saniye (3000ms) bekle ve sonra pembe özür ekranına geç
             setTimeout(() => {
                 stopConfettiLoop();
                 bravoStage.style.display = 'none';
-                teddyContainer.style.display = 'none'; // Ayıcıkları gizle (İsteğe göre kalabilir)
+                currentStage = 'sorry';
                 
-                // PEMBE VE KALPLİ AŞK TEMASINA GEÇİŞ
+                // Pembe temaya geçiş
                 document.body.style.background = "linear-gradient(135deg, #ffe5ec, #ffc2d1)";
-                heartContainer.style.display = 'block'; // Kalpleri uçurt
-                sorryStage.style.display = 'block'; // Özür sorusunu aç
+                createEffects(); // Aşağıdan yukarıya kalpli ayıcıklı uçuşmayı başlat
+                sorryStage.style.display = 'block'; 
             }, 3000);
         }
 
@@ -415,7 +445,7 @@
                 targetCell.removeEventListener('click', handleClick);
 
                 if (checkWin(O_CLASS)) {
-                    alert("Ayıcık ordusu kazandı! 🧸 Tekrar dene, affetmek için beni yenmelisin boklu!");
+                    alert("Ayıcıklar kazandı! 🧸 Tekrar dene, affetmek için beni yenmelisin boklu!");
                     startGame();
                 } else if (isDraw()) {
                     alert("Beraberlik! Tekrar dene! 🧸");
